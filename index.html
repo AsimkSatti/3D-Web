@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Three.Js Crash Course</title>
+	<style type="text/css">
+		body{
+			margin:0px;
+			padding: 0px;
+	background-color: #1a1a1a;
+
+		}
+		canvas{
+			width: 100%;
+			height: 100%;
+		}
+		.container{
+			margin:0;
+			padding: 0;
+		}
+	 
+	</style>
+</head>
+<body>
+	<script src="js/three.js"></script>
+	<script src="js/OrbitControls.js"></script>
+	<script src="js/JSONLoader.js"></script>
+	<script src="js/ObjLoader.js"></script>
+
+	<script type="text/javascript">
+		var scene = new THREE.Scene();
+		var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1,1000);
+		var renderer = new THREE.WebGLRenderer();
+
+		renderer.setSize(window.innerWidth, window.innerHeight);
+
+		document.body.appendChild(renderer.domElement);
+
+		window.addEventListener( 'resize', function(){
+			var width = window.innerWidth;
+			var height = window.innerHeight;
+			renderer.setSize( width, height );
+			camera.aspect = width/height;
+			camera.updateProjectionMatrix( );  
+		} )
+
+
+		controls = new THREE.OrbitControls( camera, renderer.domElement )
+
+
+				// instantiate a loader
+		var loader = new THREE.OBJLoader();
+
+		// load a resource
+		loader.load(
+			// resource URL
+		//	'your.obj',
+			// called when resource is loaded
+			function ( object ) {
+
+				scene.add( object );
+
+ 
+
+			},
+			// called when loading is in progresses
+			function ( xhr ) {
+
+				obj_loaded= ( xhr.loaded / xhr.total * 100 );
+				console.log(obj_loaded+"% loaded");
+
+
+			},
+			// called when loading has errors
+			function ( error ) {
+
+				console.log( 'An error happened' );
+
+			},
+
+
+		);
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+		// instantiate a loader
+//		var loader = new THREE.JSONLoader();
+
+
+
+		// //load a resource
+		// loader.load(
+		// 	// resource URL
+		// 	'the_island.json',
+
+		// 	// onLoad callback
+		// 	function ( geometry, materials ) {
+		// 		var material = materials[ 0 ];
+		// 		var object = new THREE.Mesh( geometry, material );
+		// 		scene.add( object );
+		// 		object.scale.set(0.5,0.5,0.5);
+		// 		object.position.x=0;
+		// 		object.position.y=0;
+		// 		object.position.z=0;
+				 
+		// 	},
+
+		// 	// onProgress callback
+		// 	function ( xhr ) {
+		// 		console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+		// 	},
+
+		// 	// onError callback
+		// 	function( err ) {
+		// 		console.log( 'An error happened' );
+		// 	}
+		// );
+
+
+		// loader.load(
+		// 	// resource URL
+		// 	'kakashi.json',
+
+		// 	// onLoad callback
+		// 	function ( geometry, materials ) {
+		// 		var material = materials[ 0 ];
+		// 		var object = new THREE.Mesh( geometry, material );
+		// 		scene.add( object );
+		// 		object.scale.set(4,4,4);
+		// 		object.position.x=-3;
+		// 		object.position.y=0;
+		// 		object.position.z=0;
+				 
+		// 	},
+
+		// 	// onProgress callback
+		// 	function ( xhr ) {
+		// 		console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+		// 	},
+
+		// 	// onError callback
+		// 	function( err ) {
+		// 		console.log( 'An error happened' );
+		// 	}
+		// );
+
+		var PLight = new THREE.PointLight( 0x2BDDC5, 1.0 );
+
+		 
+
+		scene.add(PLight);
+		//creat the shape
+		var Bgeometry = new THREE.BoxGeometry(1,1,1);
+	 
+		var Cgeometry = new THREE.ConeGeometry( 0.75, 0.75, 0.75 );
+
+
+		//create a material, color or image trexture
+
+		var material1 = new THREE.MeshBasicMaterial( {color: 0xFFFFFF, wireframe:true} );
+		var material2 = new THREE.MeshBasicMaterial( {color: 0x2cffcc, wireframe:false} );
+ 
+
+		var cube = new THREE.Mesh( Bgeometry, material1);
+ 
+		var cone = new THREE.Mesh( Cgeometry, material2 );
+ 
+
+		scene.add(cube);
+ 
+		scene.add(cone);
+
+		camera.position.z=1000;
+	 
+		camera.position.x=0;
+ 
+		   geo = new THREE.Geometry();
+        createVertCloud(geo);
+        createPartCloud(geo);    
+
+
+		 function createVertCloud(emptyGeo){
+        
+        for ( i = 0; i < 10000; i++){
+            
+            this.verts = new THREE.Vector3();
+
+            verts.x = Math.random() *  1000 - 500;
+            verts.y = Math.random() *  1000 - 500;
+            verts.z = Math.random() *  1000 - 500;
+
+            
+          
+          
+          
+         geo.vertices.push ( verts );
+        
+        }
+        
+    }
+
+       function createPartCloud(geo){
+        THREE.ImageUtils.crossOrigin = '';
+        tex = THREE.ImageUtils.loadTexture("https://i.imgur.com/rylmFFe.png");
+        
+        mat  = new THREE.PointCloudMaterial({size: 0.7, map : tex, transparent : true, opacity: 1, blending : "AdditiveBlending"} );
+        
+        var particles = new THREE.PointCloud( geo, mat );
+        
+        scene.add( particles );
+   
+    }
+
+
+
+
+
+
+
+
+    var sizeTracker = 1;
+    var direction = 1;
+    //update pointcloud animation
+    
+    function updateSize(){
+        sizeTracker += direction;
+        direction *=  (((sizeTracker % 100) == 0) ? -1 : 1);
+        mat.size = sizeTracker/100;
+               
+    }
+    
+    //animation speed function
+    var frameRate = 15;
+    var curTime;
+    var oldTime = Date.now();
+    var interval = 1000/frameRate;
+    var delta;
+
+ 
+
+		//game logic
+		var update = function (){
+			 cube.rotation.x+=0.001
+			 cube.rotation.y+=0.01
+
+			 cone.rotation.x+=0.01
+			 cone.rotation.y+=0.001
+			 cone.rotation.z=camera.position.z
+ 	
+ 			
+
+			 PLight.position.z=camera.position.z
+			 PLight.position.y=camera.position.y
+			 PLight.position.x=camera.position.x
+		};
+		//draw Scene
+		var render= function(){
+			renderer.render(scene,camera);
+		}
+
+		//Run game loop(update, render, repeat)
+		var GameLoop= function(){
+			requestAnimationFrame(GameLoop);
+			update();
+			render();
+ 
+			}
+ 
+		GameLoop();
+
+	</script>
+	 
+ 
+
+</body>
+</html>
+
+
