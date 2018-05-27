@@ -9,7 +9,7 @@ A planetery island:
 
 This website follows the camera (user) as the travel the planetery site.
 
-The site consists of an island in the middle of randomly positioned stars on the midst of the galaxies.
+The site consists of an island in the midst of randomly positioned stars on the midst of the galaxies.
 
 Zoom-in and Zoom-out properties are limited to maintain site the 3D obj.
 
