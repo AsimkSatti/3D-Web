@@ -11,7 +11,7 @@ This website follows the camera (user) as the travel the planetery site.
 
 The site consists of an island in the midst of randomly positioned stars within the galaxies.
 
-Zoom-in and Zoom-out properties are limited to maintain site the 3D obj.
+Zoom-in and Zoom-out properties are limited to maintain visual of the 3D obj.
 
 The camera(user) and artifical light are synced in position as you travel
 
