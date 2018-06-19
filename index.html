@@ -1,34 +1,182 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Three.Js Crash Course</title>
-	<style type="text/css">
-		body{
-			margin:0px;
-			padding: 0px;
-	background-color: #1a1a1a;
+	<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>Virtual Poly</title>
+<style>
+			body {
+				color: #FFFFFF;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
 
-		}
-		canvas{
-			width: 100%;
-			height: 100%;
-		}
-		.container{
-			margin:0;
-			padding: 0;
-		}
-	 
-	</style>
+				background-color: #000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#menu{
+
+			}
+
+			#info {
+				display: none;		 
+				width: 30%;
+				height: 100%;
+				background-color: #30E1B8;
+				position: absolute;
+				top: 0px; 
+				z-index: 1;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+				margin-left: 70%;
+				padding: 5px;
+			}
+
+			a {
+				color: #2B282D;
+			}
+
+			#one{
+				height:100px;
+		 
+				position: absolute;
+				width: 20%;
+				background-color: white;
+			 
+				padding: 5px;
+
+			}
+			#top{
+				font-size: 32px;
+				margin-left:-40%;
+			}
+
+			.personel{
+				margin-top: 70%;
+			}
+			ul{
+				margin-top: 20%;
+			}
+			ul li{
+				margin-left:-5%; 
+				list-style-type: none;
+				margin-top: 10%;
+				font-weight: 50;
+				word-spacing: 10px;
+				font-size: 15px;
+			}
+
+			li:hover {
+				color:#2B282D;
+			 
+			}
+			#heading{
+				position: absolute;
+				font-size: 35px;
+				text-align: center;
+				margin-left: 40%;
+			}
+
+			.bar1{
+	 			background-color: white;
+				z-index: 1;
+				position: absolute;
+				width: 65%;
+				height:0.5px;
+				margin-left: 20%;
+		 		margin-top:25%;
+			
+			}
+
+					.bar2{
+	 			background-color: white;
+				z-index: 1;
+				position: absolute;
+				width: 65%;
+				height:0.5px;
+				margin-left: 20%;
+		 		margin-top:38%;
+			 
+			}
+					.bar3{
+	 			background-color: white;
+				z-index: 1;
+				position: absolute;
+				width: 65%;
+				height:0.5px;
+				margin-left: 20%;
+		 		margin-top:51%;
+			 
+			}
+					.bar4{
+	 			background-color: white;
+				z-index: 1;
+				position: absolute;
+				width: 65%;
+				height:0.5px;
+				margin-left: 20%;
+		 		margin-top:64%;
+			 
+			}
+			.Portal_text{
+				position: absolute;
+			/*	display: none;*/
+				font-size: 12px;
+				margin-top: 10%;
+				margin-left:4% ;
+							font-family:Monospace;
+				/*text-indent: 25px;*/
+				width: 90%;
+				text-align: center;
+				/*word-wrap: inherit;*/
+			}
+
+ 
+
+
+		</style>
 </head>
 <body>
+
+		<div id="info">
+		 
+			<a href="#" target="_blank" rel="noopener"> <div id='top'>Virtual Poly</div></a>
+			<div id="bars">  
+				<div class='bar1'></div><div class='bar2'></div><div class='bar3'></div><div class='bar4'></div>
+			</div>
+		<ul id="menu">
+			<li onclick="portal();">Portals</li>
+			<li onclick="games();">Games</li>
+			<li onclick="presentations();">Presentations</li>
+			<li onclick="websites();">3D-Websites</li>
+			<li>More></li>
+		</ul>
+		<div class="Portal_text">
+		<p>	Defining and then breaking the line between reality and the virtual world. Creating and exploring the ideas on immersion, interactivness, and mixed reality 
+		</p>
+		</div>
+
+		<div class="personel">Asim Satti & Munzir Mukthar</div>
+		</div>
+		<div class="one"></div><div class="two"></div><div class="three"></div><div class="four"></div>
+
+		 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js"></script> -->
 	<script src="js/three.js"></script>
 	<script src="js/OrbitControls.js"></script>
 	<script src="js/JSONLoader.js"></script>
-	<script src="js/ObjLoader.js"></script>
+	<script src="js/OBJLoader.js"></script>
+	<script src="js/FBXLoader.js"></script>
+	<script src="js/DDSLoader.js"></script>
+	<script src="js/MTLLoader.js"></script>
+	<script src="js/FontLoader.js"></script>
+	<script src="js/inflate.min.js"></script>
+	<script src="js/Raycaster.js"></script>
+ 
 
 	<script type="text/javascript">
 		var scene = new THREE.Scene();
-		var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1,1000);
+		var camera = new THREE.PerspectiveCamera( 90, window.innerWidth/window.innerHeight, 0.1,1000);
 		var renderer = new THREE.WebGLRenderer();
 
 		renderer.setSize(window.innerWidth, window.innerHeight);
@@ -37,84 +185,582 @@
 
 		window.addEventListener( 'resize', function(){
 			var width = window.innerWidth;
-			var height = window.innerHeight;
+			var height = window.innerHeight/2;
 			renderer.setSize( width, height );
 			camera.aspect = width/height;
 			camera.updateProjectionMatrix( );  
 		} )
 
 
+		var raycaster = new THREE.Raycaster();
+		var mouse = new THREE.Vector2();
+		var intersected;
+
 		controls = new THREE.OrbitControls( camera, renderer.domElement )
+ controls = new THREE.OrbitControls( camera, renderer.domElement );
+controls.minDistance = 75;
+controls.maxDistance = 150;
 
 
-				// instantiate a loader
-		var loader = new THREE.OBJLoader();
 
-		// load a resource
-		loader.load(
-			// resource URL
-		//	'your.obj',
-			// called when resource is loaded
-			function ( object ) {
 
-				scene.add( object );
+	controls.enablePan = false;
+		controls.enableZoom = false; 
+		controls.enableDamping = true;
+		controls.minPolarAngle = 0.8;
+		controls.maxPolarAngle = 2.4;
+		controls.dampingFactor = 0.07;
+		controls.rotateSpeed = 0.007;
+
+
+
+
+ camera.position.z=150;
+ camera.position.y=50;
+ camera.position.x=50;
+document.addEventListener('click', ondblclick, false);
+
+		renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
+		// var loader = new THREE.JSONLoader;
+		// loader.load("final_island.json", handle_load);
+
+		// var mixer;
+
+
+		// function handle_load(geometry, materials){
+		// 	var material = new THREE.MeshLambertMaterial({morphTargets: true});
+		// 	var mesh =new THREE.Mesh(geometry, material);
+		// 	scene.add(mesh);
+		// 	mesh.position.z-=10;
+
+		// 	mixer = new THREE.AnimationMixer(mesh);
+
+		// 	var clip = THREE.AnimationClip.CreateFromMorphTargetSequence('talk', geometry.morphTargets, 30);
+		// 	mixer.clip.Animation(clip).setDuration(1).play();
+
+		// }
+
+		// render();
+
+		// var prevTime = Date.now();
+
+
+		// function render(){
+
+		// 	if (mixer){
+		// 		var time= Date.now();
+		// 		mixer.update((time -prevTime) * 0.001) 
+		// 		prevTime= time;
+		// 	}
+		// 	renderer.render(scene, camera);
+
+		// 	requestAnimationFrame(render);
+		// }
+ 
+
+
+// Link activations
+function portal(){
+		document.getElementById("info").style.backgroundColor = "#c9a5a5";
+		camera.position.y=30;
+		camera.position.x=-25;
+		camera.position.z=55;
+
+		camera.rotation.x=-0.5;
+		camera.rotation.y=-0.5;
+		camera.rotation.z=-0.2;
+
+		document.getElementById("top").innerText = "Portals";
+		document.getElementById("top").style.marginLeft = "-60%";
+ 
+	  
+	 
+}
+
+function games(){
+
+
+		camera.position.y=50;
+		camera.position.x = 8;
+		camera.position.z = -10;
+		camera.rotation.x= -3;
+		camera.rotation.y=1;
+		camera.rotation.z =3;
+		document.getElementById("info").style.backgroundColor = "#deb887";
+		document.getElementById("top").innerText = "Games";
+		document.getElementById("top").style.marginLeft = "-65%";
+}
+
+
+function presentations(){
+
+
+				   		camera.position.x=-82;
+						camera.position.y=23;
+						camera.position.z=-32;
+
+				    	camera.rotation.x=-2.7;
+						camera.rotation.y=-1.1;
+						camera.rotation.z=-2.7;
+
+				    	document.getElementById("info").style.backgroundColor = "#1a1a1a";
+				    		document.getElementById("top").innerText = "Presentations";
+				    		document.getElementById("top").style.marginLeft = "-40%";
+				    		 
+}
+
+function websites(){
+
+				   		camera.position.x=20;
+						camera.position.y=105;
+						camera.position.z=10;
+
+					camera.rotation.x=-0.3;
+					camera.rotation.y=0.3;
+					camera.rotation.z=0.1;
+					document.getElementById("top").style.marginLeft = "-45%";
+
+	document.getElementById("top").innerText = "3D-Websites";
+	document.getElementById("info").style.backgroundColor = "#8fbcbc";
+		 
+}
+
+
+
+var loader = new THREE.FontLoader();
+
+loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+
+	var geometry = new THREE.TextGeometry( 'Hello three.js!', {
+		font: font,
+		size: 80,
+		height: 5,
+		curveSegments: 12,
+		bevelEnabled: true,
+		bevelThickness: 10,
+		bevelSize: 8,
+		bevelSegments: 5
+
+
+	} );
+
+} );
 
  
 
-			},
-			// called when loading is in progresses
-			function ( xhr ) {
 
-				obj_loaded= ( xhr.loaded / xhr.total * 100 );
-				console.log(obj_loaded+"% loaded");
+        var mtlLoader = new THREE.MTLLoader();
+   //     mtlLoader.setPath("../assets/models/");
+        mtlLoader.load('myIsland2.mtl', function(materials) {
+            materials.preload();
+            var objLoader = new THREE.OBJLoader();
+            objLoader.setMaterials(materials);
+     //       objLoader.setPath("../assets/models/");
+            objLoader.load('myIsland2.obj', function(object) {
+  object.scale.set(0.5,0.5,0.5);
+  object.position.y-=100;
+  scene.add(object)
 
-
-			},
-			// called when loading has errors
-			function ( error ) {
-
-				console.log( 'An error happened' );
-
-			},
-
-
-		);
+            });
+        });
 
 
 
 
 
-		var PLight = new THREE.PointLight( 0x2BDDC5, 1.0 );
+
+
+
+
+
+
+scene.background = new THREE.Color( 0x2B282D );
+
+
+
+
+
+
+
+	// var loader = new THREE.FBXLoader();
+	// 			loader.load( 'myIsland2.fbx', function( object ) {
+
+	// 				object.scale.set(0.5,0.5,0.5);
+ 
+
+	// 				scene.add( object );
+
+	// 			} );
+
+
+				
+
+
+
+
+
+
+
+
+
+			function ondblclick(event) {
+		  		    x = (event.clientX / window.innerWidth) * 2 - 1;
+				    y = -(event.clientY / window.innerHeight) * 2 + 1;
+				    dir = new THREE.Vector3(x, y, -1)
+				    dir.unproject(camera)
+				    var its_3=false;
+				    var its_2=false;
+				    ray = new THREE.Raycaster(camera.position, dir.sub(camera.position).normalize())
+				    var intersects3 = ray.intersectObject(cube3);
+				    var intersects2 = ray.intersectObject(cube2);
+				    var intersects4 = ray.intersectObject(cone);
+
+				    var intersects5 = ray.intersectObject(cube4);
+				    var intersects6 = ray.intersectObject(cube5);
+
+		 
+				    
+				    if ( intersects3.length > 0 )
+				    {
+ 
+ 
+ 
+				   		camera.position.y=35;
+						camera.position.x=-25;
+						camera.position.z=55;
+
+						camera.rotation.x=-0.5;
+						camera.rotation.y=-0.4;
+						camera.rotation.z=-0.2;
+ 
+						document.getElementById("top").innerText = "Portals";
+						document.getElementById("top").style.marginLeft = "-60%";
+
+						document.getElementById("info").style.backgroundColor = "#c9a5a5";
+
+				    }
+				    else if(intersects2.length > 0){
+
+						camera.position.y=50;
+						camera.position.x = 8;
+						camera.position.z = -10;
+						camera.rotation.x= -3;
+						camera.rotation.y=1;
+						camera.rotation.z =3;
+						document.getElementById("info").style.backgroundColor = "#deb887";
+
+						document.getElementById("top").innerText = "Games";
+						document.getElementById("top").style.marginLeft = "-65%";
+				    }
+				    else if(intersects4.length > 0){
+ 						
+				    	document.getElementById("info").style.display= "inherit";
+			 
+				    }
+				    else if(intersects5.length > 0){
+
+
+
+
+				   		camera.position.x=-82;
+						camera.position.y=23;
+						camera.position.z=-32;
+
+				    	camera.rotation.x=-2.7;
+						camera.rotation.y=-1.1;
+						camera.rotation.z=-2.7;
+
+				    	document.getElementById("info").style.backgroundColor = "#1a1a1a";
+
+				    	document.getElementById("top").innerText = "Presentations";
+				    	document.getElementById("top").style.marginLeft = "-40%";
+
+				    }
+				    else if(intersects6.length > 0){
+				    	camera.position.x=20;
+						camera.position.y=105;
+						camera.position.z=10;
+
+					camera.rotation.x=-0.3;
+					camera.rotation.y=0.3;
+					camera.rotation.z=0.1;
+
+					document.getElementById("top").style.marginLeft = "-45%";
+
+	document.getElementById("top").innerText = "3D-Websites";
+
+	document.getElementById("info").style.backgroundColor = "#8fbcbc";
+				     
+				    }
+};
+
+				// // model
+
+				// var onProgress = function ( xhr ) {
+
+				// 	if ( xhr.lengthComputable ) {
+
+				// 		var percentComplete = xhr.loaded / xhr.total * 100;
+				// 		console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
+
+				// 	}
+
+				// };
+
+				// var onError = function ( xhr ) { };
+
+				// THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+
+				// new THREE.MTLLoader()
+				// 	// .setPath( 'models/obj/male02/' )
+				// 	.load( 'myIsland2.mtl', function ( materials ) {
+
+				// 		materials.preload();
+
+				//   var loader = new THREE.OBJLoader();
+				// 	loader.load("myIsland2.obj", function(object) {
+
+				 
+				//  let child;
+				//  for(let i = 0; i < object.children.length; i++) {
+ 			// 	   child = object.children[i];
+  		// 		  scene.add(new THREE.Mesh(child.geometry, new THREE.MeshPhongMaterial({ })));
+				// 								}
+				// 	    // then directly add the object
+				// 	    scene.add(object);
+				// 	});
+
+				// 	} );
+
+
+  
+    controls.rotateSpeed = 0.25;
+    controls.enableZoom = true;
+
+
+
+var ambientLight = new THREE.AmbientLight( 0xcccccc, 0.6 );
+				scene.add( ambientLight );
+
+				var pointLight = new THREE.PointLight( 0xffffff, 1);
+				pointLight.position.y=50;
+				camera.add( pointLight );
+
+
+
+
+
+
+
+var raycaster = new THREE.Raycaster();
+var mouse = new THREE.Vector2();
+
+function onMouseMove( event ) {
+
+	// calculate mouse position in normalized device coordinates
+	// (-1 to +1) for both components
+
+
+mouse.x = +(event.targetTouches[0].pageX / window.innerwidth) * 2 +-1;
+
+mouse.y = -(event.targetTouches[0].pageY / window.innerHeight) * 2 + 1;
+
+}
+
+function render() {
+
+ 
+
+	renderer.render( scene, camera );
+
+}
+
+window.addEventListener( 'mousemove', onMouseMove, false );
+
+window.requestAnimationFrame(render);
+
+
+
+
+ 
+ 
+		// ///			instantiate a loader
+		// var loader = new THREE.OBJLoader();
+
+		// // load a resource
+		// loader.load(
+		// 	// resource URL
+
+		// 	'myIsland.obj',
+		// 	// called when resource is loaded
+		// 	function ( object ) {
+		// 	 	object.position.z-=75;
+		// 		scene.add( object );
+
+ 
+
+		// 	},
+		// 	// called when loading is in progresses
+		// 	function ( xhr ) {
+
+		// 		obj_loaded= ( xhr.loaded / xhr.total * 100 );
+		// 		console.log(obj_loaded+"% loaded");
+
+
+		// 	},
+		// 	// called when loading has errors
+		// 	function ( error ) {
+
+		// 		console.log( 'An error happened' );
+
+		// 	},
+
+
+		// );
+
+ 
+	 
+ 
+ 	// var onError = function ( xhr ) { };
+
+		// 		THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+
+		// 		var loader = new THREE.MTLLoader()
+
+
+				 
+		// 			.load( 'myIsland.mtl', function ( materials ) {
+
+		// 				materials.preload();
+
+		// 				 var loader = new THREE.OBJLoader()
+		// 					.setMaterials( materials )
+						 
+		// 					.load( 'myIsland.obj', function ( object ) {
+
+							 
+		// 						scene.add( object );
+
+		// 					}, onProgress, onError );
+
+		// 			} );
+
+		// 		//
+
+
+
+
+
+ // var loader = new THREE.OBJLoader;
+ 
+	// 	loader.load(
+	// 		// resource URL
+	// 		'myIsland2.obj',
+
+	// 		// onLoad callback
+	// 		function ( geometry, materials ) {
+	// 			var material = materials[ 0 ];
+	// 			var object = new THREE.Mesh( geometry, material );
+	// 			scene.add( object );
+	// 			object.scale.set(0.5,0.5,0.5);
+ 
+	// 		},
+
+	// 		// onProgress callback
+	// 		function ( xhr ) {
+	// 			console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+	// 		},
+
+	// 		// onError callback
+	// 		function( err ) {
+	// 			console.log( 'An error happened' );
+	// 		}
+	// 	);
+
+		var PLight = new THREE.PointLight( 0xFFFFFF, 0.5 );
+
+		PLight.castShadow = true;    
 
 		 
 
+
+
+
 		scene.add(PLight);
 		//creat the shape
+
+
+
+
 		var Bgeometry = new THREE.BoxGeometry(1,1,1);
-	 
 		var Cgeometry = new THREE.ConeGeometry( 0.75, 0.75, 0.75 );
 
 
 		//create a material, color or image trexture
 
 		var material1 = new THREE.MeshBasicMaterial( {color: 0xFFFFFF, wireframe:true} );
+		var material3 = new THREE.MeshBasicMaterial({color:0xdeb887, wireframe:true});
+		var material4 = new THREE.MeshBasicMaterial({color:0xBC8F8F, wireframe:false});
 		var material2 = new THREE.MeshBasicMaterial( {color: 0x2cffcc, wireframe:false} );
+		var material5 = new THREE.MeshBasicMaterial({color:0x1a1a1a, wireframe:false});
+		var material6 = new THREE.MeshBasicMaterial({color:0x8fbcbc, wireframe:true});
  
 
-		var cube = new THREE.Mesh( Bgeometry, material1);
- 
+		var cube1 = new THREE.Mesh( Bgeometry, material1);
+		var cube2 = new THREE.Mesh(Bgeometry, material3);
+		var cube3 = new THREE.Mesh(Bgeometry, material4);
 		var cone = new THREE.Mesh( Cgeometry, material2 );
- 
 
-		scene.add(cube);
+		var cube4 = new THREE.Mesh(Bgeometry,material5);
+ 		
+ 		var cube5 = new THREE.Mesh(Bgeometry,material6);
+
+
+		cube1.position.x-=6;
+		cube1.position.z-=3;
+
+		cube2.position.y=50;
+
+		cube3.position.y=30;
+		cube3.position.x=-25;
+		cube3.position.z=35;
+
  
+		cone.rotation.y=90;
+		cube3.scale.set(5,5,5);
+
+		cone.scale.set(0.9,0.9,0.9);
+		cube2.scale.set(5,5,5)
+
+		cube4.position.x=-70;
+		cube4.position.y=23;
+		cube4.position.z=-30;
+
+		cube4.scale.set(4,4,4);
+
+		cube5.position.y=100;
+		cube5.position.x=10;
+
+		cube5.scale.set(6,3,5);
+
+		scene.add(cube5);
+		scene.add(cube1);
 		scene.add(cone);
+		scene.add(cube2);
+		scene.add(cube3);
 
-		camera.position.z=1000;
-	 
-		camera.position.x=0;
- 
-		   geo = new THREE.Geometry();
+ 		scene.add(cube4);
+
+
+
+
+
+
+
+
+
+		geo = new THREE.Geometry();
         createVertCloud(geo);
         createPartCloud(geo);    
 
@@ -143,7 +789,7 @@
         THREE.ImageUtils.crossOrigin = '';
         tex = THREE.ImageUtils.loadTexture("https://i.imgur.com/rylmFFe.png");
         
-        mat  = new THREE.PointCloudMaterial({size: 0.7, map : tex, transparent : true, opacity: 1, blending : "AdditiveBlending"} );
+        mat  = new THREE.PointCloudMaterial({size: 0.4, map : tex, transparent : true, opacity: 1, blending : "AdditiveBlending"} );
         
         var particles = new THREE.PointCloud( geo, mat );
         
@@ -154,6 +800,9 @@
 
 
 
+ 
+var angle = 0;
+var radius = 500;
 
 
 
@@ -176,26 +825,86 @@
     var interval = 1000/frameRate;
     var delta;
 
- 
+  var start=false;
 
 		//game logic
 		var update = function (){
-			 cube.rotation.x+=0.001
-			 cube.rotation.y+=0.01
+			 cube1.rotation.x+=0.001
+			 cube1.rotation.y+=0.01
 
-			 cone.rotation.x+=0.01
-			 cone.rotation.y+=0.001
-			 cone.rotation.z=camera.position.z
- 	
- 			
+			 cube2.rotation.x+=0.001
+			 cube2.rotation.y+=0.01
 
+			  cube3.rotation.x+=0.1
+			 cube3.rotation.y+=0.001
+
+ 
+			 cone.rotation.y+=0.1
+
+			 cube4.rotation.y+=0.1
+			 cube4.rotation.z+=0.02
+
+			 cube5.rotation.x+=0.01
+			 cube5.rotation.z+=0.1
+
+			  
+ 		if(cube5.position.x<25 && start==false){
+ 			cube5.position.x+=0.1;
+ 			if(cube5.position.x>24){
+ 				start=true
+ 			}
+ 		}
+ 		else{
+ 				cube5.position.x-=0.1;
+ 				if(cube5.position.x<1){
+ 					start=false;
+ 				}
+ 		}
+
+			 
+			  
+			 
+
+
+ 
+cone.position.copy( camera.position );
+cone.rotation.copy( camera.rotation );
+cone.updateMatrix();
+
+cone.translateZ( - 9 );
+cone.translateX(+15);
+cone.translateY(+7);
+
+
+
+
+ 	//		console.log(cube2.position.x, cube2.position.z);
+		 cone.rotation.y+=12;
+ controls.autoRotate = true;
+
+  // console.log(camera.rotation.x,camera.rotation.y,camera.rotation.z);
+ 			 //console.log(camera.position.x,camera.position.y,camera.position.z)
 			 PLight.position.z=camera.position.z
 			 PLight.position.y=camera.position.y
 			 PLight.position.x=camera.position.x
 		};
+
+
+
+
+
+
+
+
 		//draw Scene
 		var render= function(){
 			renderer.render(scene,camera);
+
+
+
+
+
+
 		}
 
 		//Run game loop(update, render, repeat)
@@ -208,6 +917,54 @@
  
 		GameLoop();
 
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				if ( mixers.length > 0 ) {
+
+					for ( var i = 0; i < mixers.length; i ++ ) {
+
+						mixers[ i ].update( clock.getDelta() );
+
+					}
+
+				}
+
+				renderer.render( scene, camera );
+
+				stats.update();
+
+			};
+
+
+
+		function onWindowResize() {
+
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+
+			renderer.setSize( window.innerWidth, window.innerHeight );
+
+		};
+ function onDocumentMouseMove( event ) {
+
+		//	event.preventDefault();
+
+			mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+			mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+			// console.log(mouse.x, mouse.y);
+			raycaster.setFromCamera( mouse, camera );
+			};
+
+
+	// var tab=document.getElementById("info");
+	// TweenLite.to(tab, 2, {right:20});
+ 
+// var tab=document.getElementById("paper");
+// 	TweenLite.to(tab, 2, {left:500});
+ 
 	</script>
 	 
  
